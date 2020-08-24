@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/assets/css/myStyle.css">
 </head>
 
-<body>
+<body class="bg">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,23 +41,53 @@
 <div class="container">
     <h2 class="mtop">Add students</h2>
     <div class="row">
-        <div class="col-md-4">
-            <input type="text" id="inputName">
-            <button type="button" class="btn btn-primary" id="add">Add</button>
+        <div class="col-md-6">
+            <form>
+                <div class="form-group row">
+                    <label for="inputFirstName" class="col-sm-3 col-form-label">First Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="inputFirstName">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputLastName" class="col-sm-3 col-form-label">Last Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="inputLastName">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="inputEmail">
+                    </div>
+                </div>
+            </form>
+
+            <button type="button" class="btn btn-primary offset-md-5" id="add">Add</button>
             <ul id="person">
             </ul>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h2>Details</h2>
-            <label for="#">First Name</label>
-            <p id="firstName">Hello</p>
-
-            <label for="#">Last Name</label>
-            <p id="lastName"></p>
+            <div class="form-row">
+                <label class="control-label font-weight-bold" for="#">First Name:&nbsp;</label>
+                <p id="firstName"></p>
+            </div>
+            <div class="form-row">
+                <label class="font-weight-bold" for="#">Last Name:&nbsp;</label>
+                <p id="lastName"></p>
+            </div>
+            <div class="form-row">
+                <label class="font-weight-bold" for="#">Email:&nbsp;</label>
+                <p id="email"></p>
+            </div>
         </div>
     </div>
 </div>
-<script src="/assets/js/script.js"></script>
+<script type="text/javascript" src="/assets/js/data.json"></script>
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
 
 </body>
 

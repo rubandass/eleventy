@@ -1,31 +1,48 @@
+
 $(document).ready(function () {
-    let person = { 'students': [{ 'firstName': 'Ruban', 'lastName': 'Jhondass' }] };
-    console.log(person.students);
-    person.students.push({ 'firstName': 'Rubandass' })
-    person.students.push({ 'firstName': 'dass' })
+    let items;
 
-    // document.getElementById('myData').innerHTML = person.students[1].firstName;
-
-    $("#add").click(function () {
-        let name = $("#inputName").val();
-        if (name != "") {
-            person.students.push({ 'firstName': name });
-        }
-        $('#person').empty();
-        listPerson();
-        // alert($('#personId_0').val())
+    // Loading json file
+    $.getJSON("/assets/js/data.json", function (data) {
+        processJson(data);
     });
 
-    function listPerson() {
-        for (var prop in person.students) {
-            console.log(person.students[prop].firstName);
-            console.log(prop);
-            document.getElementById('person').innerHTML += '<a href="" id="personId_' + prop + '">' + '<li>' + person.students[prop].firstName + '</li></a>';
-            console.log($('#personId_0').val());
-            $('#firstName').html($('#personId_0').val());
-        }
+    // Processing json data and store it to global variable called "items"
+    function processJson(jsonData) {
+        items = jsonData;
+        populateData();
+
+        $("#add").click(function () {
+            let inputFirstName = $("#inputFirstName").val();
+            let inputLastName = $("#inputLastName").val();
+            let inputEmail = $("#inputEmail").val();
+            if (inputFirstName != "") {
+                items.push({ 'id': (items.length + 1).toString(), 'firstName': inputFirstName, 'lastName': inputLastName, 'email': inputEmail });
+            } else {
+                alert("First Name field is blank!")
+            }
+            $('#person').empty();
+            // Clear the input fields
+            $("#inputFirstName").val("");
+            $("#inputLastName").val("");
+            $("#inputEmail").val("");
+            populateData();
+        });
     }
-    listPerson();
-    console.log($('#personId_1').val());
+
+    function populateData() {
+        items.forEach(item => {
+            $("#person").append('<div id="' + item.id + '">' + '<a href="#" class="person" data-id="' + item.id + '">' + '<li>' + item.firstName + '</li></a></div>');
+        });
+
+        $(".person").click(function () {
+            let id = $(this).data('id');
+            let resultArray = items[id - 1];    // 'id' gives values from '1', but index starts from '0'
+            $("#firstName").html(resultArray['firstName']);
+            $("#lastName").html(resultArray['lastName']);
+            $("#email").html(resultArray['email']);
+        });
+    }
+
 
 });

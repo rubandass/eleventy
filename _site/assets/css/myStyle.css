@@ -5,3 +5,12 @@
 .mtop {
   margin-top: 10px;
 }
+
+.bg {
+  background: url(/assets/img/background_image.jpg) no-repeat center center
+    fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
