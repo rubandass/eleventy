@@ -17,7 +17,7 @@ $(document).ready(function () {
             let inputLastName = $("#inputLastName").val();
             let inputEmail = $("#inputEmail").val();
             if (inputFirstName != "") {
-                items.push({ 'id': (items.length + 1).toString(), 'firstName': inputFirstName, 'lastName': inputLastName, 'email': inputEmail });
+                items.push({ 'id': (items.length + 1), 'firstName': inputFirstName, 'lastName': inputLastName, 'email': inputEmail });
             } else {
                 alert("First Name field is blank!")
             }
@@ -32,15 +32,15 @@ $(document).ready(function () {
 
     function populateData() {
         items.forEach(item => {
-            $("#person").append('<div id="' + item.id + '">' + '<a href="#" class="person" data-id="' + item.id + '">' + '<li>' + item.firstName + '</li></a></div>');
+            $("#person").append('<a href="#" class="person" data-id="' + item.id + '">' + '<li>' + item.firstName + '</li></a>');
         });
 
         $(".person").click(function () {
             let id = $(this).data('id');
             let resultArray = items[id - 1];    // 'id' gives values from '1', but index starts from '0'
-            $("#firstName").html(resultArray['firstName']);
-            $("#lastName").html(resultArray['lastName']);
-            $("#email").html(resultArray['email']);
+            $("#firstName").html(resultArray.firstName);
+            $("#lastName").html(resultArray.lastName);
+            $("#email").html(resultArray.email);
         });
     }
 
