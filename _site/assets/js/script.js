@@ -72,17 +72,33 @@ $(document).ready(function () {
             populateData();
         });
 
+        let _editPersonId;
         // Edit person
         $('.editPerson').click(function () {
-            let _id = $(this).data('id');
-            let resultArray = items.filter(x => x.id == _id);    // Filtering the element from items array
+            $('#personForm')[0].reset();
+            $('#personModalLabel').html('Edit Person');
+            _editPersonId = $(this).data('id');
+            let resultArray = items.filter(x => x.id == _editPersonId);    // Filtering the element from items array
 
-            $("#inputFirstName").val(resultArray[0].firstName);
-            $("#inputLastName").val(resultArray[0].lastName);
-            $("#inputEmail").val(resultArray[0].email);
-            $('#add').text('Update');
+            $("#editFirstName").val(resultArray[0].firstName);
+            $("#editLastName").val(resultArray[0].lastName);
+            $("#editEmail").val(resultArray[0].email);
+
+            $("#personModal").modal();
+
         });
 
+        $("form#personForm").submit(function (e) {
+            let editFirstName = $("#editFirstName").val();
+            let editLastName = $("#editLastName").val();
+            let editEmail = $("#editEmail").val();
+            let resultIndex = items.findIndex(x => x.id === _editPersonId);
+            items[resultIndex] = { 'id': _editPersonId, 'firstName': editFirstName, 'lastName': editLastName, 'email': editEmail };
+            localStorage.setItem("students", JSON.stringify(items));
+            $('#person').empty();
+            populateData();
+            $("#personModal").modal('hide');
+        });
     }
 
 
