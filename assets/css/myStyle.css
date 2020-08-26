@@ -15,6 +15,6 @@
   background-color: red;
 }
 .scrollable {
-  height: 350px;
+  height: 450px;
   overflow-y: scroll;
 }

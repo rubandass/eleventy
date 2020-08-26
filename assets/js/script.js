@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
     let items = [];
+    let _editPersonId;
+    let addButtonClicked = false;
 
     // Loading json file
     $.getJSON("/assets/js/data.json", function (data) {
@@ -9,10 +11,11 @@ $(document).ready(function () {
             localStorage.setItem("students", JSON.stringify(data));
         }
         items = JSON.parse(localStorage.getItem('students'));
+        clearPersonDetails();
         populateData();
 
         // Add Person
-        $("#add").click(function () {
+        /*$("#add").click(function () {
             let inputFirstName = $("#inputFirstName").val();
             let inputLastName = $("#inputLastName").val();
             let inputEmail = $("#inputEmail").val();
@@ -33,8 +36,20 @@ $(document).ready(function () {
                 alert("First Name is required!")
             }
 
-        });
+        });*/
 
+        $("#add").click(function () {
+            $('#personForm')[0].reset();
+            $('#personModalLabel').html('Add Person');
+            $("#editFirstName").val('');
+            $("#editLastName").val('');
+            $("#editEmail").val('');
+            $("#errors").html("");
+            clearPersonDetails();
+            addButtonClicked = true;
+            $("#personModal").modal();
+
+        });
 
     });
 
@@ -60,21 +75,26 @@ $(document).ready(function () {
         // Delete person
         $(".deletePerson").click(function () {
             let _id = $(this).data('id');
+            let resultArray = items.filter(x => x.id == _id);
             let resultIndex = items.findIndex(x => x.id === _id);
+            $("#spanPersonName").text(resultArray[0].firstName);
+            $("#personDeleteModal").modal();
 
-            items.splice(resultIndex, 1);    // remove an item from items array.
-            localStorage.setItem("students", JSON.stringify(items));
+            $("#submitDelete").click(function () {
+                items.splice(resultIndex, 1);    // remove an item from items array.
+                localStorage.setItem("students", JSON.stringify(items));
 
-            $('#person').empty();       // clear the table contents
-            $("#firstName").html("");
-            $("#lastName").html("");
-            $("#email").html("");
-            populateData();
+                $('#person').empty();       // clear the table contents
+                clearPersonDetails();
+                $("#personDeleteModal").modal('hide');
+                populateData();
+            });
+
         });
 
-        let _editPersonId;
         // Edit person
         $('.editPerson').click(function () {
+            addButtonClicked = false;
             $('#personForm')[0].reset();
             $('#personModalLabel').html('Edit Person');
             _editPersonId = $(this).data('id');
@@ -83,22 +103,40 @@ $(document).ready(function () {
             $("#editFirstName").val(resultArray[0].firstName);
             $("#editLastName").val(resultArray[0].lastName);
             $("#editEmail").val(resultArray[0].email);
-
+            $("#errors").html("");
+            clearPersonDetails();
             $("#personModal").modal();
 
         });
 
-        $("form#personForm").submit(function (e) {
+        $("#submitPerson").click(function () {
+
             let editFirstName = $("#editFirstName").val();
             let editLastName = $("#editLastName").val();
             let editEmail = $("#editEmail").val();
             let resultIndex = items.findIndex(x => x.id === _editPersonId);
-            items[resultIndex] = { 'id': _editPersonId, 'firstName': editFirstName, 'lastName': editLastName, 'email': editEmail };
-            localStorage.setItem("students", JSON.stringify(items));
-            $('#person').empty();
-            populateData();
-            $("#personModal").modal('hide');
+            let _id = items.length === 0 ? 1 : (items[items.length - 1].id) + 1;
+            if (editFirstName.trim() === "") {
+                $("#errors").html('<li>' + 'First Name is required' + '</li>')
+            } else {
+                if (addButtonClicked) {
+                    items.push({ 'id': _id, 'firstName': editFirstName, 'lastName': editLastName, 'email': editEmail });
+                } else {
+                    items[resultIndex] = { 'id': _editPersonId, 'firstName': editFirstName, 'lastName': editLastName, 'email': editEmail };
+                }
+                localStorage.setItem("students", JSON.stringify(items));
+                $('#person').empty();
+                populateData();
+                $("#personModal").modal('hide');
+            }
+            addButtonClicked = false;
         });
+    }
+
+    function clearPersonDetails() {
+        $("#firstName").html("");
+        $("#lastName").html("");
+        $("#email").html("");
     }
 
 
